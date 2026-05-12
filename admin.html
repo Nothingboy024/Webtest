@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<h2>Admin Panel</h2>
+
+<input id="searchAnime" placeholder="Search anime by name">
+<div id="results"></div>
+
+<h3 id="selected"></h3>
+
+<input id="epLink" placeholder="Paste EMBED link here">
+<button onclick="addEp()">Add Episode</button>
+
+<script>
+let current='';
+
+document.getElementById('searchAnime').oninput=async function(){
+ const q=this.value;
+ const r=await fetch(`https://api.jikan.moe/v4/anime?q=${q}`);
+ const d=await r.json();
+
+ const box=document.getElementById('results');
+ box.innerHTML='';
+
+ d.data.slice(0,5).forEach(a=>{
+  const div=document.createElement('div');
+  div.innerText=a.title;
+  div.onclick=()=>{
+   current=a.title;
+   document.getElementById('selected').innerText='Selected: '+a.title;
+  };
+  box.appendChild(div);
+ });
+};
+
+function addEp(){
+ if(!current) return alert('Select anime');
+ const link=document.getElementById('epLink').value;
+
+ let arr=JSON.parse(localStorage.getItem(current)||'[]');
+ arr.push(link);
+ localStorage.setItem(current,JSON.stringify(arr));
+ alert('Episode added');
+}
+</script>
+</body>
+</html>
