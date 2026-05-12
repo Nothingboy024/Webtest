@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<h2 id="title"></h2>
+<div id="episodes"></div>
+
+<script>
+const title=decodeURIComponent(new URLSearchParams(location.search).get('title'));
+document.getElementById('title').innerText=title;
+
+const data=JSON.parse(localStorage.getItem(title)||'[]');
+const box=document.getElementById('episodes');
+
+data.forEach((link,i)=>{
+ const h=document.createElement('h3');
+ h.innerText='Episode '+(i+1);
+ const iframe=document.createElement('iframe');
+ iframe.src=link;
+ box.appendChild(h);
+ box.appendChild(iframe);
+});
+</script>
+</body>
+</html>
